@@ -1,18 +1,61 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div style="padding: 30px; width: 50%; margin: 10px auto;">
+    <el-form>
+      <el-form-item label="账号">
+        <el-input v-model="formData.username"/>
+      </el-form-item>
+      <el-form-item label="密码">
+        <el-input v-model="formData.password"/>
+      </el-form-item>
+      <el-form-item>
+        <el-button style="margin: 0 auto;" @click="login">登录</el-button>
+      </el-form-item>
+    </el-form>
+  </div>
+  <div style="margin-top: 50px;">
+    <el-button @click="select">查询</el-button>
+    <div>{{ userData }}</div>
   </div>
 </template>
 
-<script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
 
-export default {
-  name: 'HomeView',
-  components: {
-    HelloWorld
-  }
-}
+<script setup>
+import {ref} from "vue";
+import {ElMessage} from "element-plus";
+
+const formData = ref({username: "", password: ""});
+const userData = ref("");
+
+const login = () => {
+  axios.post("http://localhost:8080/v1/user/login", formData.value)
+      .then((response) => {
+        if (response.data.code === 1001) {
+          localStorage.token = response.data.data.token;
+        } else if (response.data.code === 2001) {
+          ElMessage.warning(response.data.data);
+        } else {
+          ElMessage.warning("未知错误");
+        }
+      });
+};
+
+const select = () => {
+  axios.get("http://localhost:8080/v1/user/select",)
+      .then((response) => {
+        if (response.data.code === 1001) {
+          console.log(response.data.data);
+          userData.value = JSON.stringify(response.data.data);
+        } else if (response.data.code === 2001) {
+          ElMessage.warning(response.data.data);
+        } else {
+          ElMessage.warning("未知错误");
+        }
+      });
+};
+
 </script>
+
+
+<style scoped>
+
+</style>

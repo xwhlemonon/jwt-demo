@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 @Slf4j
@@ -19,8 +21,21 @@ public class LoginFilters implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-
-        THREAD_LOCAL.set("OK");
+        HttpServletRequest httpRequest = (HttpServletRequest) request;
+        Cookie[] cookies = httpRequest.getCookies();
+        if (cookies != null) {
+            String cookieToken = null;
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("my-token")) {
+                    cookieToken = cookie.getValue();
+                }
+            }
+            String headerToken = httpRequest.getHeader("Authorization");
+            if (headerToken != null && headerToken.equals(cookieToken)) {
+                String token = jwtUtils.verify(headerToken);
+                THREAD_LOCAL.set(token);
+            }
+        }
         chain.doFilter(request, response);
         THREAD_LOCAL.remove();
     }

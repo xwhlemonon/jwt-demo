@@ -1,22 +1,17 @@
-package com.xwh.user.pojo.dto;
+package com.xwh.user.pojo.entity;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import javax.validation.constraints.NotNull;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserLoginDTO {
+public class UserTokenData {
 
-    @NotNull
     @ApiModelProperty("用户名")
     String username;
-    @NotNull
-    @ApiModelProperty("密码")
-    String password;
+    String UA;
+    String IP;
 
 }
