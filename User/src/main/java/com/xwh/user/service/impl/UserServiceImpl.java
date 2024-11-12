@@ -28,8 +28,8 @@ public class UserServiceImpl implements IUserService {
         UserTokenData userTokenData = new UserTokenData();
         String header = httpRequest.getHeader("user-agent");
         userTokenData.setUsername(dto.getUsername());
-        userTokenData.setUA(header);
-        userTokenData.setIP("user-IP");
+        userTokenData.setUserAgent(header);
+        userTokenData.setIP("USER-IP");
         String token = jwtUtils.sign(userTokenData);
         Assert.isTrue(token != null, "数据为空");
         UserLoginVO vo = new UserLoginVO();

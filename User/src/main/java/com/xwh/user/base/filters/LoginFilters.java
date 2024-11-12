@@ -26,15 +26,12 @@ public class LoginFilters implements Filter {
         if (cookies != null) {
             String cookieToken = null;
             for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("my-token")) {
+                if (cookie.getName().equals("token")) {
                     cookieToken = cookie.getValue();
                 }
             }
-            String headerToken = httpRequest.getHeader("Authorization");
-            if (headerToken != null && headerToken.equals(cookieToken)) {
-                String token = jwtUtils.verify(headerToken);
-                THREAD_LOCAL.set(token);
-            }
+            String token = jwtUtils.verify(cookieToken);
+            THREAD_LOCAL.set(token);
         }
         chain.doFilter(request, response);
         THREAD_LOCAL.remove();

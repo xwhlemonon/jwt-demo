@@ -11,7 +11,7 @@ public class UserTokenData {
 
     @ApiModelProperty("用户名")
     String username;
-    String UA;
+    String userAgent;
     String IP;
 
 }
