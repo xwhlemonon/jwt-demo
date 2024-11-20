@@ -1,6 +1,7 @@
 package com.xwh.user.base.filters;
 
 import com.xwh.user.base.jwt.JwtUtils;
+import com.xwh.user.base.utils.ThreadLocalUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -13,8 +14,6 @@ import java.io.IOException;
 @Slf4j
 @Component
 public class LoginFilters implements Filter {
-
-    public static final ThreadLocal<String> THREAD_LOCAL = new ThreadLocal<>();
 
     @Autowired
     private JwtUtils jwtUtils;
@@ -31,10 +30,10 @@ public class LoginFilters implements Filter {
                 }
             }
             String token = jwtUtils.verify(cookieToken);
-            THREAD_LOCAL.set(token);
+            if (token != null) ThreadLocalUtil.set(token);
         }
         chain.doFilter(request, response);
-        THREAD_LOCAL.remove();
+        ThreadLocalUtil.clear();
     }
 
 }

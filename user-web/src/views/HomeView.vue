@@ -30,7 +30,7 @@ const login = () => {
   axios.post("/v1/user/login", formData.value)
       .then((response) => {
         if (response.data.code === 1001) {
-          localStorage.token = response.data.data.token;
+          ElMessage.success("认证成功");
         } else if (response.data.code === 2001) {
           ElMessage.warning(response.data.data);
         } else {
@@ -43,7 +43,6 @@ const select = () => {
   axios.get("/v1/user/select",)
       .then((response) => {
         if (response.data.code === 1001) {
-          console.log(response.data.data);
           userData.value = JSON.stringify(response.data.data);
         } else if (response.data.code === 2001) {
           ElMessage.warning(response.data.data);

@@ -1,10 +1,9 @@
 package com.xwh.user.controller;
 
 import com.xwh.user.base.response.JsonResult;
-import com.xwh.user.base.utils.CookieUtils;
 import com.xwh.user.pojo.dto.UserLoginDTO;
 import com.xwh.user.pojo.entity.UserTokenData;
-import com.xwh.user.pojo.vo.UserLoginVO;
+import com.xwh.user.pojo.vo.UserVO;
 import com.xwh.user.service.IUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -29,11 +28,10 @@ public class UserController {
 
     @PostMapping("login")
     @ApiOperation("登录接口")
-    public JsonResult<UserLoginVO> login(@RequestBody @Validated UserLoginDTO dto, @ApiIgnore HttpServletRequest httpRequest, @ApiIgnore HttpServletResponse httpResponse) {
+    public JsonResult<UserVO> login(@RequestBody @Validated UserLoginDTO dto, @ApiIgnore HttpServletRequest httpRequest, @ApiIgnore HttpServletResponse httpResponse) {
         log.debug("登录: {}", dto);
-        UserLoginVO vo = service.login(dto, httpRequest);
-        CookieUtils.reset(httpResponse, vo.getToken());
-        return new JsonResult<UserLoginVO>().ok(vo);
+        UserVO vo = service.login(dto, httpRequest, httpResponse);
+        return new JsonResult<UserVO>().ok(vo);
     }
 
     @GetMapping("select")
